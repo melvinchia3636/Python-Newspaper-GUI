@@ -1,0 +1,8 @@
+from tkinter import *; from bs4 import BeautifulSoup; from tkinter.font import Font; from PIL import Image, ImageTk; import requests, ctypes
+if __name__ == '__main__':
+    try:
+        htmltext=BeautifulSoup(requests.get('https://inshorts.com/en/read').content, 'html.parser'); titles, contents = re.findall(re.compile('<span itemprop="headline">(.+?)</span>'),str(htmltext)), re.findall(re.compile('<div itemprop="articleBody">(.+?)</div>'),str(htmltext))
+        root = Tk(); root.geometry('1100x800+410+140'); root.config(bg='white'); root.resizable(False, False); root.title('Python Newspaper'); root.iconbitmap('icon.ico'); mainicon = ImageTk.PhotoImage(Image.open('icon.png')); titleicon = Label(image=mainicon, bg='white').place(x=350,y=25); titlelabel = Label(root, text='Python Newspaper', bg='white', fg='black', font=Font(size=30, family='Bahnschrift SemiBold')).place(x=400, y=20); textframe = Frame(root, bg='#829356', width=972, height=652).place(x=63.5, y=96); textbox = Text(root, width = 120, height=40, relief=FLAT); textbox.place(x=67.5, y=100); textbox.tag_configure('titlestyle', background='white', foreground='#829356', font=Font(size=20, family='Bahnschrift SemiBold'), relief='raised'); textbox.tag_configure('contentstyle', background='white', foreground='#131516', font='Helvetica 15', relief='raised')
+        for i in range(min(len(titles), len(contents))): textbox.insert(END, titles[i]+'\n', 'titlestyle'); textbox.insert(END, contents[i]+'\n\n','contentstyle')
+        textbox.config(state=DISABLED); root.mainloop()
+    except: ctypes.windll.user32.MessageBoxW(0,'Please check your internet connection','Internet Connection Error',0|0x10); quit()
